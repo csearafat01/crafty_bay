@@ -1,3 +1,8 @@
+import 'package:crafty_bay/presentation/ui/screens/carts_screen.dart';
+import 'package:crafty_bay/presentation/ui/screens/category_screen.dart';
+import 'package:crafty_bay/presentation/ui/screens/home_screen.dart';
+import 'package:crafty_bay/presentation/ui/screens/wishlish_screen.dart';
+import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class MainBottomNavScreen extends StatefulWidget {
@@ -8,43 +13,34 @@ class MainBottomNavScreen extends StatefulWidget {
 }
 
 class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
+  int _selectedIndex = 0;
+  final List<Widget> _screen = const [
+    HomeScreen(),
+    CategoryScreen(),
+    CartsScreen(),
+    WishListScreen(),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
-      appBar: AppBar(
-
-        title: const Text('Innovation App'),
-        titleSpacing: 10,
-        ///centerTitle: true,
-        toolbarHeight: 60,
-        toolbarOpacity: 1,
-        elevation: 6,
-        backgroundColor: Colors.green,
-        actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.comment)),
-          IconButton(onPressed: (){}, icon: Icon(Icons.search)),
-          IconButton(onPressed: (){}, icon: Icon(Icons.settings)),
-          IconButton(onPressed: (){}, icon: Icon(Icons.email))
-        ],
-
-      ),
-      floatingActionButton: FloatingActionButton(
-        elevation: 18,
-        child: Icon(Icons.add),
-        backgroundColor: Colors.green,
-        onPressed: (){},
-      ),
+      body: _screen[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Message'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-        onTap: (int index){
-
+        currentIndex: _selectedIndex,
+        selectedItemColor: AppColors.primaryColor,
+        unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,
+        onTap: (index){
+          _selectedIndex = index;
+          if(mounted){
+            setState(() {});
+          }
         },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Categories'),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Carts'),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite_outlined), label: 'Wishlist'),
+        ],
       ),
 
     );
