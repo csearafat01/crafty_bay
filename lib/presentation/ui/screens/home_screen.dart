@@ -1,10 +1,13 @@
+import 'package:crafty_bay/presentation/state_holders/main_bottom_nav_controller.dart';
+import 'package:crafty_bay/presentation/ui/screens/product_list_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/assets_path.dart';
+import 'package:crafty_bay/presentation/ui/widgets/category_item.dart';
+import 'package:crafty_bay/presentation/ui/widgets/home/circle_icon_button.dart';
+import 'package:crafty_bay/presentation/ui/widgets/home/banner_carousel.dart';
+import 'package:crafty_bay/presentation/ui/widgets/home/section_title.dart';
+import 'package:crafty_bay/presentation/ui/widgets/product_card_item.dart';
 import 'package:flutter/material.dart';
-import '../widgets/category_item.dart';
-import '../widgets/home/banner_carousel.dart';
-import '../widgets/home/circle_icon_button.dart';
-import '../widgets/home/section_title.dart';
-import '../widgets/product_card_item.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,49 +17,44 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8,),
               searchTextField,
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16,),
               const BannerCarousel(),
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16,),
               SectionTitle(
                 title: 'All Categories',
-                onTapSeeAll: () {},
+                onTapSeeAll: () {
+                  Get.find<MainBottomNavController>().changeIndex(1);
+                },
               ),
               categoryList,
               SectionTitle(
                 title: 'Popular',
-                onTapSeeAll: () {},
+                onTapSeeAll: () {
+                  Get.to(() => const ProductListScreen());
+                },
               ),
               productList,
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8,),
               SectionTitle(
                 title: 'Special',
                 onTapSeeAll: () {},
               ),
               productList,
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8,),
               SectionTitle(
-                title: 'new',
+                title: 'New',
                 onTapSeeAll: () {},
               ),
               productList,
@@ -79,7 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
           return const CategoryItem();
         },
         separatorBuilder: (_, __) {
-          return const SizedBox(width: 8.0);
+          return const SizedBox(
+            width: 8,
+          );
         },
       ),
     );
@@ -97,7 +97,9 @@ class _HomeScreenState extends State<HomeScreen> {
           return const ProductCardItem();
         },
         separatorBuilder: (_, __) {
-          return const SizedBox(width: 8.0);
+          return const SizedBox(
+            width: 8,
+          );
         },
       ),
     );
@@ -108,11 +110,11 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: InputDecoration(
         hintText: 'Search',
         filled: true,
+        fillColor: Colors.grey.shade200,
         prefixIcon: const Icon(
           Icons.search,
           color: Colors.grey,
         ),
-        fillColor: Colors.grey.shade200,
         border: OutlineInputBorder(
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(8)),
@@ -122,10 +124,6 @@ class _HomeScreenState extends State<HomeScreen> {
         focusedBorder: OutlineInputBorder(
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(8)),
-        // errorBorder: OutlineInputBorder(
-        //     borderSide: BorderSide.none,
-        //     borderRadius: BorderRadius.circular(8)
-        // ),
       ),
     );
   }
@@ -138,16 +136,12 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () {},
           iconData: Icons.person,
         ),
-        const SizedBox(
-          width: 8,
-        ),
+        const SizedBox(width: 8,),
         CircleIconButton(
           onTap: () {},
           iconData: Icons.call,
         ),
-        const SizedBox(
-          width: 8,
-        ),
+        const SizedBox(width: 8,),
         CircleIconButton(
           onTap: () {},
           iconData: Icons.notifications_active_outlined,
@@ -156,5 +150,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-
