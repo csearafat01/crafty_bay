@@ -133,7 +133,7 @@ class _VerifyOTPScreenState extends State<VerifyOTPScreen> {
                         ),
                         children: [
                           TextSpan(text: 'This code will expire '),
-                          // TODO - make this timer workable
+                          // doneTODO - make this timer workable
                         ],
                       ),
                     ),
