@@ -4,6 +4,8 @@ import 'package:crafty_bay/presentation/ui/screens/main_bottom_nav_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/ui/widgets/app_logo.dart';
 import 'package:crafty_bay/presentation/ui/widgets/center_circular_progress_indicator.dart';
+import 'package:crafty_bay/presentation/ui/widgets/otp_timer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -75,7 +77,9 @@ class _VerifyOTPScreenState extends State<VerifyOTPScreen> {
                   backgroundColor: Colors.transparent,
                   enableActiveFill: true,
                   onCompleted: (v) {
-                    print("Completed");
+                    if (kDebugMode) {
+                      print("Completed");
+                    }
                   },
                   appContext: context,
                 ),
@@ -119,23 +123,22 @@ class _VerifyOTPScreenState extends State<VerifyOTPScreen> {
                 const SizedBox(
                   height: 24,
                 ),
-                RichText(
-                  text: const TextSpan(
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                    children: [
-                      TextSpan(text: 'This code will expire '),
-                      // TODO - make this timer workable
-                      TextSpan(
-                        text: '120s',
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RichText(
+                      text: const TextSpan(
                         style: TextStyle(
-                          color: AppColors.primaryColor,
-                          fontWeight: FontWeight.w600,
+                          color: Colors.grey,
                         ),
+                        children: [
+                          TextSpan(text: 'This code will expire '),
+                          // TODO - make this timer workable
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    const OtpTimer(),
+                  ],
                 ),
                 TextButton(
                   onPressed: () {},
