@@ -167,11 +167,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           width: 8,
         ),
         ElevatedButton(
-          onPressed: () { Get.to(() => const ReviewScreen()); },
+          onPressed: () {
+            Get.to(() => ReviewPage());
+          },
           style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white, backgroundColor: Colors.white, // Change to your preferred text color
+            foregroundColor: Colors.white,
+            backgroundColor:
+                Colors.white,
           ),
-          child:  const Text(
+          child: const Text(
             'Reviews',
             style: TextStyle(
                 fontSize: 16,

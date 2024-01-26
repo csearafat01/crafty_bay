@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../state_holders/review_controller.dart';
 
 class CreateReviewPage extends StatelessWidget {
-  const CreateReviewPage({super.key});
+  final ReviewController reviewController = Get.put(ReviewController());
+
+  CreateReviewPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,22 +18,27 @@ class CreateReviewPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const TextField(
-              decoration: InputDecoration(labelText: 'First Name'),
+            TextField(
+              decoration: const InputDecoration(labelText: 'First Name'),
+              onChanged: reviewController.updateFirstName,
             ),
-            const SizedBox(height: 16,),
-            const TextField(
-              decoration: InputDecoration(labelText: 'Last Name'),
+            const SizedBox(height: 16),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Last Name'),
+              onChanged: reviewController.updateLastName,
             ),
-            const SizedBox(height: 16,),
-            const TextField(
-              decoration: InputDecoration(labelText: 'Write Review'),
+            const SizedBox(height: 16),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Write Review'),
               maxLines: 5,
+              onChanged: reviewController.updateReviewText,
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 // Implement the logic to save the review
+                reviewController.addReview();
+                Get.back();
               },
               child: const Text('Submit'),
             ),
