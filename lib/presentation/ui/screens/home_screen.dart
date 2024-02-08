@@ -195,10 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
       title: Image.asset(AssetsPath.logoNav),
       actions: [
         CircleIconButton(
-          onTap: () async {
-            await AuthController.clearAuthData();
-            Get.offAll(() => const VerifyEmailScreen());
-          },
+          onTap: () {},
           iconData: Icons.person,
         ),
         const SizedBox(width: 8,),
@@ -210,6 +207,14 @@ class _HomeScreenState extends State<HomeScreen> {
         CircleIconButton(
           onTap: () {},
           iconData: Icons.notifications_active_outlined,
+        ),
+        const SizedBox(width: 8,),
+        CircleIconButton(
+          onTap: () async {
+            await AuthController.clearAuthData();
+            Get.offAll(() => const VerifyEmailScreen());
+          },
+          iconData: Icons.logout_outlined,
         ),
       ],
     );

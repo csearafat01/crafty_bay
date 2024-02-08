@@ -1,22 +1,50 @@
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:crafty_bay/data/models/response_data.dart';
+import 'package:get/get.dart';
+import 'package:crafty_bay/data/models/review_product_model.dart';
+import 'package:crafty_bay/data/services/network_caller.dart';
+import 'package:crafty_bay/data/utility/urls.dart';
+
+class ReviewProductController extends GetxController {
+  var reviewProductInProgress = false.obs;
+  var reviewProductModel = Rx<ReviewProductModel>(ReviewProductModel());
+  var message = ''.obs;
+
+  Future<bool> createProductReview(
+      String reviewDescription, int productId, String rating) async {
+    reviewProductInProgress.value = true;
+    update();
+
+    final ResponseData response = await NetworkCaller().postRequest(
+      Urls.createProductReview,
+    );
+
+    reviewProductInProgress.value = false;
+
+    if (response.isSuccess) {
+      reviewProductModel.value =
+          ReviewProductModel.fromJson(response.responseJson!);
+      update();
+      return true;
+    } else {
+      message.value = 'Review failed! Try again';
+      update();
+      return false;
+    }
+  }
+}
 
 class ReviewController extends GetxController {
-  final RxList<Review> reviews = <Review>[].obs;
-  final RxString firstName = ''.obs;
-  final RxString lastName = ''.obs;
-  final RxString reviewText = ''.obs;
+  final reviews = <Review>[].obs;
+  final firstName = ''.obs;
+  final lastName = ''.obs;
+  final reviewText = ''.obs;
 
   String get getFirstName => firstName.value;
-
   String get getLastName => lastName.value;
-
   String get getReviewText => reviewText.value;
 
   void updateFirstName(String value) => firstName.value = value;
-
   void updateLastName(String value) => lastName.value = value;
-
   void updateReviewText(String value) => reviewText.value = value;
 
   void addReview() {

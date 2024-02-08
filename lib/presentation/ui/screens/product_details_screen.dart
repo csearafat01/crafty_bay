@@ -9,9 +9,12 @@ import 'package:crafty_bay/presentation/ui/widgets/center_circular_progress_indi
 import 'package:crafty_bay/presentation/ui/widgets/product_details/color_selector.dart';
 import 'package:crafty_bay/presentation/ui/widgets/product_details/product_image_carousel.dart';
 import 'package:crafty_bay/presentation/ui/widgets/product_details/size_selector.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:item_count_number_button/item_count_number_button.dart';
+
+import '../../state_holders/create_wish_list_controller.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({super.key, required this.productId});
@@ -43,11 +46,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   Color? _selectedColor;
   String? _selectedSize;
+  bool wishCircular = false;
 
   @override
   void initState() {
     super.initState();
-    print(AuthController.token);
+    if (kDebugMode) {
+      print(AuthController.token);
+    }
     Get.find<ProductDetailsController>().getProductDetails(widget.productId);
   }
 
@@ -223,18 +229,54 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         const SizedBox(
           width: 8,
         ),
-        Card(
-          color: AppColors.primaryColor,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          child: const Padding(
-            padding: EdgeInsets.all(4.0),
-            child: Icon(
-              Icons.favorite_outline_rounded,
-              size: 18,
-              color: Colors.white,
-            ),
-          ),
-        )
+        GetBuilder<CreateWishListController>(
+            builder: (createWishListController) {
+              if (createWishListController.createWishListInProgress) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return Card(
+                color: wishCircularMethod(),
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: InkWell(
+                    onTap: () async {
+                      final response = await createWishListController
+                          .createWishList(widget.productId);
+                      if (response) {
+                        wishCircular = true;
+                        Get.showSnackbar(
+                          const GetSnackBar(
+                            title: 'Welcome',
+                            message:
+                            'This product added to your wishlist',
+                            backgroundColor: AppColors.primaryColor,
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      } else {
+                        Get.showSnackbar(
+                          const GetSnackBar(
+                            title: 'Failed to add wishlist!',
+                            message: 'Try again',
+                            backgroundColor: Colors.redAccent,
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
+                    },
+                    child: const Icon(
+                      Icons.favorite_border_outlined,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                  ),
+                ),
+
+
+              );
+            })
       ],
     );
   }
@@ -262,7 +304,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     color: Colors.black45),
               ),
               Text(
-                '\$10232930',
+                '৳94000',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -358,4 +400,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 //       .replaceAll('Color(', '')
 //       .replaceAll(')', '');
 // }
+  wishCircularMethod(){
+    return wishCircular == true ? Colors.redAccent : AppColors.primaryColor;
+
+  }
 }
