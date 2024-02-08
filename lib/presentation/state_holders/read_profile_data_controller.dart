@@ -1,7 +1,8 @@
-import 'package:crafty_bay/data/models/profile.dart';
 import 'package:crafty_bay/data/services/network_caller.dart';
 import 'package:crafty_bay/data/utility/urls.dart';
 import 'package:get/get.dart';
+
+import '../../data/models/read_profile_data.dart';
 
 class ReadProfileDataController extends GetxController {
   bool _inProgress = false;
@@ -12,9 +13,9 @@ class ReadProfileDataController extends GetxController {
 
   String get errorMessage => _errorMessage;
 
-  Profile _profile = Profile();
+  ReadProfileData _profile = ReadProfileData();
 
-  Profile get profile => _profile;
+  ReadProfileData get profile => _profile;
 
   bool _isProfileCompleted = false;
 
@@ -30,7 +31,7 @@ class ReadProfileDataController extends GetxController {
       if (profileData ==  null) {
         _isProfileCompleted = false;
       } else {
-        _profile = Profile.fromJson(profileData);
+        _profile = ReadProfileData.fromJson(profileData);
         _isProfileCompleted = true;
       }
       update();

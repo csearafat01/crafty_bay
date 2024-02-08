@@ -1,4 +1,4 @@
-import 'package:crafty_bay/data/models/create_profile_params.dart';
+import 'package:crafty_bay/data/models/create_profile_data.dart';
 import 'package:crafty_bay/presentation/state_holders/complete_profile_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/verify_otp_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/main_bottom_nav_screen.dart';
@@ -15,11 +15,12 @@ class CompleteProfileScreen extends StatefulWidget {
 }
 
 class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
-  final TextEditingController _firstNameTEController = TextEditingController();
-  final TextEditingController _lastNameTEController = TextEditingController();
+  final TextEditingController _nameTEController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
   final TextEditingController _mobileTEController = TextEditingController();
   final TextEditingController _cityTEController = TextEditingController();
-  final TextEditingController _shippingAddressTEController = TextEditingController();
+  final TextEditingController _shippingAddressTEController =
+      TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -59,12 +60,12 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   height: 16,
                 ),
                 TextFormField(
-                  controller: _firstNameTEController,
-                  decoration: const InputDecoration(hintText: 'First name'),
+                  controller: _nameTEController,
+                  decoration: const InputDecoration(hintText: 'Full name'),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
-                      return 'Enter first name';
+                      return 'Enter your name';
                     }
                     return null;
                   },
@@ -73,12 +74,12 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   height: 16,
                 ),
                 TextFormField(
-                  controller: _lastNameTEController,
-                  decoration: const InputDecoration(hintText: 'Last name'),
+                  controller: _countryController,
+                  decoration: const InputDecoration(hintText: 'Country name'),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
-                      return 'Enter last name';
+                      return 'Enter your country';
                     }
                     return null;
                   },
@@ -118,7 +119,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 TextFormField(
                   controller: _shippingAddressTEController,
                   maxLines: 4,
-                  decoration: const InputDecoration(hintText: 'Shipping address'),
+                  decoration:
+                      const InputDecoration(hintText: 'Shipping address'),
                   textInputAction: TextInputAction.done,
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
@@ -134,46 +136,30 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   width: double.infinity,
                   child: GetBuilder<CompleteProfileController>(
                       builder: (completeProfileController) {
-                        return Visibility(
-                          visible: completeProfileController.inProgress == false,
-                          replacement: const CenterCircularProgressIndicator(),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                final createProfileParams = CreateProfileParams(
-                                  firstName:
-                                  _firstNameTEController.text.trim(),
-                                  lastName:
-                                  _lastNameTEController.text.trim(),
-                                  mobile: _mobileTEController.text.trim(),
-                                  city: _cityTEController.text.trim(),
-                                  shippingAddress:
-                                  _shippingAddressTEController.text
-                                      .trim(),
-                                );
-                                final bool result =
-                                await completeProfileController
-                                    .createProfileData(
-                                    Get.find<VerifyOTPController>().token,
-                                    createProfileParams
-                                );
-                                if (result) {
-                                  Get.offAll(() => const MainBottomNavScreen());
-                                } else {
-                                  Get.showSnackbar(GetSnackBar(
-                                    title: 'Complete profile failed',
-                                    message: completeProfileController.errorMessage,
-                                    duration: const Duration(seconds: 2),
-                                    isDismissible: true,
-                                  ));
-                                }
-                              }
-                            },
-                            child: const Text('Complete'),
-                          ),
-                        );
-                      }
-                  ),
+                    return Visibility(
+                      visible: completeProfileController.inProgress == false,
+                      replacement: const CenterCircularProgressIndicator(),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            final bool result = (completeProfileController
+                                .createProfileData) as bool;
+                            if (result) {
+                              Get.offAll(() => const MainBottomNavScreen());
+                            } else {
+                              Get.showSnackbar(GetSnackBar(
+                                title: 'Complete profile failed',
+                                message: completeProfileController.errorMessage,
+                                duration: const Duration(seconds: 2),
+                                isDismissible: true,
+                              ));
+                            }
+                          }
+                        },
+                        child: const Text('Complete'),
+                      ),
+                    );
+                  }),
                 ),
               ],
             ),
@@ -185,8 +171,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
 
   @override
   void dispose() {
-    _firstNameTEController.dispose();
-    _lastNameTEController.dispose();
+    _nameTEController.dispose();
+    _countryController.dispose();
     _cityTEController.dispose();
     _mobileTEController.dispose();
     _shippingAddressTEController.dispose();

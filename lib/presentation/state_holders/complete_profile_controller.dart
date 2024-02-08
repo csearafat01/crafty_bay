@@ -1,36 +1,54 @@
-import 'package:crafty_bay/data/models/create_profile_params.dart';
-import 'package:crafty_bay/data/models/profile.dart';
-import 'package:crafty_bay/data/services/network_caller.dart';
-import 'package:crafty_bay/data/utility/urls.dart';
-import 'package:crafty_bay/presentation/state_holders/auth_controller.dart';
+import 'package:crafty_bay/data/models/create_profile_data.dart';
+import 'package:crafty_bay/data/models/create_profile_model.dart';
+import 'package:crafty_bay/data/models/response_data.dart';
 import 'package:get/get.dart';
 
+import '../../data/services/network_caller.dart';
+import '../../data/utility/urls.dart';
+
 class CompleteProfileController extends GetxController {
-  bool _inProgress = false;
+  bool _createProfileInProgress = false;
+  CreateProfileData _createProfileData = CreateProfileData();
+  String _message = '';
 
-  bool get inProgress => _inProgress;
+  bool get createProfileInProgress => _createProfileInProgress;
+  CreateProfileData get createProfileData => _createProfileData;
+  String get message => _message;
 
-  String _errorMessage = '';
+  get inProgress => null;
 
-  String get errorMessage => _errorMessage;
+  get errorMessage => null;
 
-  Profile _profile = Profile();
-
-  Profile get profile => _profile;
-
-  Future<bool> createProfileData(String token, CreateProfileParams params) async {
-    _inProgress = true;
+  Future<bool> createProfile(String name, String address, String city,
+      String state, String postCode, String country, String phone) async {
+    _createProfileInProgress = true;
     update();
-    final response = await NetworkCaller()
-        .postRequest(Urls.createProfile, token: token, body: params.toJson());
-    _inProgress = false;
+
+    final ResponseData response =
+    await NetworkCaller().postRequest(Urls.createProfile, {
+      "cus_name": name,
+      "cus_add": address,
+      "cus_city": city,
+      "cus_state": state,
+      "cus_postcode": postCode,
+      "cus_country": country,
+      "cus_phone": phone,
+      "cus_fax": phone,
+      "ship_name": name,
+      "ship_add": address,
+      "ship_city": city,
+      "ship_state": state,
+      "ship_postcode": postCode,
+      "ship_country": country,
+      "ship_phone": phone,
+    });
+    _createProfileInProgress = false;
     if (response.isSuccess) {
-      _profile = Profile.fromJson(response.responseData['data']);
-      await Get.find<AuthController>().saveUserDetails(token, _profile);
+      _createProfileData = CreateProfileModel.fromJson(response.responseJson ?? {}).data!;
       update();
       return true;
     } else {
-      _errorMessage = response.errorMessage;
+      _message = 'Profile creation failed! Try again';
       update();
       return false;
     }

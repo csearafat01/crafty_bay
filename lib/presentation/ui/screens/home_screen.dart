@@ -6,7 +6,6 @@ import 'package:crafty_bay/presentation/state_holders/main_bottom_nav_controller
 import 'package:crafty_bay/presentation/state_holders/new_product_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/popular_product_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/special_product_controller.dart';
-import 'package:crafty_bay/presentation/ui/screens/auth/verify_email_screen.dart';
 import 'package:crafty_bay/presentation/ui/screens/product_list_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/assets_path.dart';
 import 'package:crafty_bay/presentation/ui/widgets/center_circular_progress_indicator.dart';
@@ -16,8 +15,9 @@ import 'package:crafty_bay/presentation/ui/widgets/home/section_title.dart';
 import 'package:crafty_bay/presentation/ui/widgets/product_card_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../widgets/category_item.dart';
+import 'auth/complete_profile_screen.dart';
+import 'auth/read_profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -195,11 +195,14 @@ class _HomeScreenState extends State<HomeScreen> {
       title: Image.asset(AssetsPath.logoNav),
       actions: [
         CircleIconButton(
-          onTap: () async {
-            await AuthController.clearAuthData();
-            Get.offAll(() => const VerifyEmailScreen());
-          },
-          iconData: Icons.person,
+          onTap: () {
+            //print(AuthController.readProfile);
+            if (AuthController.profile != null) {
+              Get.to(const ReadProfileScreen());
+            } else {
+              Get.to(const CompleteProfileScreen());
+            }
+          }, iconData: Icons.person,
         ),
         const SizedBox(width: 8,),
         CircleIconButton(
@@ -210,6 +213,12 @@ class _HomeScreenState extends State<HomeScreen> {
         CircleIconButton(
           onTap: () {},
           iconData: Icons.notifications_active_outlined,
+        ),
+        CircleIconButton(
+          onTap: () {
+            AuthController.clearAuthData();
+          },
+          iconData: Icons.logout_outlined,
         ),
       ],
     );

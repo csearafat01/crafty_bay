@@ -106,7 +106,7 @@ class _CartListScreenState extends State<CartListScreen> {
             width: 100,
             child: ElevatedButton(
               onPressed: () {
-                Get.to(() => const CheckoutScreen());
+                Get.to(() => const CheckOutScreen());
               },
               child: const Text('Check out'),
             ),

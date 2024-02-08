@@ -9,6 +9,7 @@ import 'package:crafty_bay/presentation/ui/widgets/center_circular_progress_indi
 import 'package:crafty_bay/presentation/ui/widgets/product_details/color_selector.dart';
 import 'package:crafty_bay/presentation/ui/widgets/product_details/product_image_carousel.dart';
 import 'package:crafty_bay/presentation/ui/widgets/product_details/size_selector.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:item_count_number_button/item_count_number_button.dart';
@@ -47,7 +48,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    print(AuthController.token);
+    if (kDebugMode) {
+      print(AuthController.token);
+    }
     Get.find<ProductDetailsController>().getProductDetails(widget.productId);
   }
 

@@ -10,4 +10,6 @@ class ResponseData {
     required this.responseData,
     this.errorMessage = 'Something went wrong!',
   });
+
+  get responseJson => null;
 }

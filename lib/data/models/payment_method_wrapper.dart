@@ -6,7 +6,8 @@ class PaymentMethodWrapper {
   int? vat;
   int? total;
 
-  PaymentMethodWrapper({this.paymentMethodList, this.payable, this.vat, this.total});
+  PaymentMethodWrapper(
+      {this.paymentMethodList, this.payable, this.vat, this.total});
 
   PaymentMethodWrapper.fromJson(Map<String, dynamic> json) {
     if (json['paymentMethod'] != null) {

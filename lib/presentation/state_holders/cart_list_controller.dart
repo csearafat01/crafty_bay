@@ -4,7 +4,11 @@ import 'package:crafty_bay/data/services/network_caller.dart';
 import 'package:crafty_bay/data/utility/urls.dart';
 import 'package:get/get.dart';
 
+import '../../data/models/response_data.dart';
+
 class CartListController extends GetxController {
+
+
   bool _inProgress = false;
 
   String _errorMessage = '';
@@ -38,6 +42,21 @@ class CartListController extends GetxController {
     _inProgress = false;
     update();
     return isSuccess;
+  }
+
+  Future<bool> removeFromCart(int id) async {
+    update();
+    final ResponseData response =
+    await NetworkCaller().getRequest(Urls.removeFromCart(id));
+    if (response.isSuccess) {
+      _cartListModel.cartItemList?.removeWhere((element) => element.productId == id);
+      _calculateTotalPrice;
+      update();
+      return true;
+    } else {
+      update();
+      return false;
+    }
   }
 
   void updateQuantity(int id, int quantity) {

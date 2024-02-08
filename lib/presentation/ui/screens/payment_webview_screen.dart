@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PaymentWebViewScreen extends StatefulWidget {
-  const PaymentWebViewScreen({super.key, required this.url});
+  const PaymentWebViewScreen({super.key, required this.url, required String paymentUrl});
 
   final String url;
 
